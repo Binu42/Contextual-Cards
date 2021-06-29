@@ -1,4 +1,3 @@
-/* eslint-disable no-mixed-operators */
 import styled from "styled-components";
 import { CardGroupType, CardType } from "types/cardGroups";
 
@@ -30,9 +29,18 @@ const CardGroupWrapper = styled.div<{cardGroup: CardGroupType}>`
 `;
 
 const CardWrapper = styled.div<{cardGroup: CardGroupType, card: CardType}>`
+  position: relative;
   width: ${({cardGroup}) => getWidth(cardGroup)};
   height: ${({cardGroup}) => getHeight(cardGroup)};
 `;
+
+const Title = styled.h1`
+  font-size: 1rem;
+`
+
+const Image = styled.div`
+  position: absolute;
+`
 
 const CardGroup = ({ cardGroup }: { cardGroup: CardGroupType }) => {
   const { cards } = cardGroup;
@@ -41,11 +49,11 @@ const CardGroup = ({ cardGroup }: { cardGroup: CardGroupType }) => {
       {cards.map((card: CardType, index: number) => {
         const { name, bg_image } = card;
         return <CardWrapper cardGroup={cardGroup} card={card}>
-          <div className="title">{name}</div>
-          {bg_image?.image_url && <div className="bg-image">
+          <Title>{name}</Title>
+          {bg_image?.image_url && <Image>
             <img src={bg_image.image_url} alt={name} />
-          </div>}
-          </CardWrapper>;
+          </Image>}
+        </CardWrapper>;
       })}
     </CardGroupWrapper>
   );
