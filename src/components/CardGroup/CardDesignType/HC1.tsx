@@ -29,11 +29,10 @@ const Title = styled.div`
 `
 
 const SubHeader = styled(Title)`
-  color: #1B1B1E;
+  color: #1b1b1ec4;
 `
 
 const HC1 = ({card}: {card: CardType}) => {
-  console.log(card)
   const {name, title,  bg_image, icon, bg_color} = card;
   const imageSrc = bg_image?.image_url || icon?.image_url;
   return (

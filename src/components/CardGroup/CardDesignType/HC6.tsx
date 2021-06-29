@@ -1,12 +1,13 @@
+import {ChevronRight} from 'react-feather'
 import Avatar from 'components/Avatar'
 import styled from "styled-components"
 import { CardType } from 'types/cardGroups'
 
-type HC1Props = {
+type HC6Props = {
   bgColor?: string
 }
 
-const HC6Wrapper = styled.div<HC1Props>`
+const HC6Wrapper = styled.div<HC6Props>`
   display: flex;
   padding: 8px;
   align-items: center;
@@ -23,17 +24,20 @@ const DetailsWrapper = styled.div`
   flex: 1 1 auto;
 `
 
+const IconWrapper = styled.div`
+  flex: 0 0 auto;
+`
+
 const Title = styled.div`
   font-weight: 500;
   font-size: 14px;
 `
 
 const SubHeader = styled(Title)`
-  color: #1B1B1E;
+  color: #1b1b1ec4;
 `
 
 const HC6 = ({card}: {card: CardType}) => {
-  console.log(card)
   const {name, title,  bg_image, icon, bg_color} = card;
   const imageSrc = bg_image?.image_url || icon?.image_url;
   return (
@@ -45,6 +49,9 @@ const HC6 = ({card}: {card: CardType}) => {
         <Title>{name}</Title>
         <SubHeader>{title}</SubHeader>
       </DetailsWrapper>
+      <IconWrapper>
+        <ChevronRight/>
+      </IconWrapper>
     </HC6Wrapper>
   )
 }
