@@ -1,39 +1,31 @@
-import styled from 'styled-components'
-import { CardGroupsContext } from 'context/cardGroups/context'
-import { useContext } from 'react'
-import Spinner from "components/Spinner"
-import Alert from "components/Alert"
+import styled from "styled-components";
+import { CardGroupsContext } from "context/cardGroups/context";
+import { useContext } from "react";
+import Spinner from "components/Spinner";
+import Alert from "components/Alert";
+import CardGroup from "components/CardGroup";
+import {CardGroupType} from 'types/cardGroups'
 
 const HomeWrapper = styled.div`
-  background-color: #F7F6F3;
+  background-color: #f7f6f3;
   height: 100%;
   padding: 24px 20px;
-`
+`;
 
 const Home = () => {
-  const {cardGroups, pending, failure} = useContext(CardGroupsContext);
+  const { cardGroups, pending, failure } = useContext(CardGroupsContext);
 
-  if(pending) return <Spinner/>
+  if (pending) return <Spinner />;
 
-  if(failure) return <Alert msg="Mock API Response went wrong" type="error" />
+  if (failure) return <Alert msg="Mock API Response went wrong" type="error" />;
 
   return (
     <HomeWrapper>
-      {
-        cardGroups.map(cardGroup=>{
-          const {cards, id}=cardGroup;
-          return <div key={id}>
-            {
-              cards.map((card:any, index: number) => {
-                const {name}=card;
-                return <div key={index}>{name}</div>
-              })
-            }
-          </div>
-        })
-      }
+      {cardGroups.map((cardGroup : CardGroupType) => (
+        <CardGroup key={cardGroup.id} cardGroup={cardGroup} />
+      ))}
     </HomeWrapper>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
