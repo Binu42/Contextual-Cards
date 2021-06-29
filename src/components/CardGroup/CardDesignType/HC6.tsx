@@ -38,7 +38,7 @@ const SubHeader = styled(Title)`
 `
 
 const HC6 = ({card}: {card: CardType}) => {
-  const {name, title,  bg_image, icon, bg_color} = card;
+  const {name, description, title,  bg_image, icon, bg_color} = card;
   const imageSrc = bg_image?.image_url || icon?.image_url;
   return (
     <HC6Wrapper bgColor={bg_color}>
@@ -46,8 +46,8 @@ const HC6 = ({card}: {card: CardType}) => {
         <Avatar src={imageSrc} alt={name}/>
       </AvatarWrapper>
       <DetailsWrapper>
-        <Title>{name}</Title>
-        <SubHeader>{title}</SubHeader>
+        <Title>{title}</Title>
+        <SubHeader>{description}</SubHeader>
       </DetailsWrapper>
       <IconWrapper>
         <ChevronRight/>
