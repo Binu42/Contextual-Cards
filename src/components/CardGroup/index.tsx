@@ -1,59 +1,60 @@
 import styled from "styled-components";
+import {HC1, HC6} from "./CardDesignType"
 import { CardGroupType, CardType } from "types/cardGroups";
 
-const getWidth = (cardGroupProps: CardGroupType): string => {
-  const { design_type } = cardGroupProps;
+const getWidth = (design_type: string): string => {
   switch (design_type) {
-    case "HC3" || "HC6" || "HC5" || "HC1":
+    case "HC6":
       return "100%";
+    case "HC1":
+      return "50%"
     default:
       return "unset";
   }
 };
 
-const getHeight = (cardGroupProps: CardGroupType): string => {
-  const { design_type, height } = cardGroupProps;
-  switch (design_type) {
-    case "HC3":
-      return "100%";
-    case "HC9":
-      return `${height}px`;
-    default:
-      return "unset";
-  }
-};
+// const getHeight = (cardGroupProps: CardGroupType): string => {
+//   const { design_type, height } = cardGroupProps;
+//   switch (design_type) {
+//     case "HC3":
+//       return "100%";
+//     case "HC9":
+//       return `${height}px`;
+//     default:
+//       return "unset";
+//   }
+// };
 
 const CardGroupWrapper = styled.div<{cardGroup: CardGroupType}>`
   display: flex;
-  overflow: ${({cardGroup}) => (cardGroup.is_scrollable ? "auto" : "hidden")};
+  gap: 8px;
+  overflow-x: ${({cardGroup}) => (cardGroup.is_scrollable ? "auto" : "hidden")};
+  padding: 4px;
+  >div {
+    flex: ${({cardGroup}) => (cardGroup.is_scrollable && "0 0 70%")};
+    width: ${({cardGroup}) => getWidth(cardGroup.design_type)};
+  }
+  /* remove scrollbar */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 `;
-
-const CardWrapper = styled.div<{cardGroup: CardGroupType, card: CardType}>`
-  position: relative;
-  width: ${({cardGroup}) => getWidth(cardGroup)};
-  height: ${({cardGroup}) => getHeight(cardGroup)};
-`;
-
-const Title = styled.h1`
-  font-size: 1rem;
-`
-
-const Image = styled.div`
-  position: absolute;
-`
 
 const CardGroup = ({ cardGroup }: { cardGroup: CardGroupType }) => {
   const { cards } = cardGroup;
   return (
     <CardGroupWrapper cardGroup={cardGroup}>
       {cards.map((card: CardType, index: number) => {
-        const { name, bg_image } = card;
-        return <CardWrapper cardGroup={cardGroup} card={card}>
-          <Title>{name}</Title>
-          {bg_image?.image_url && <Image>
-            <img src={bg_image.image_url} alt={name} />
-          </Image>}
-        </CardWrapper>;
+        switch(cardGroup.design_type){
+          case "HC1":
+            return <HC1 key={index} card={card} />
+          case "HC6": 
+            return <HC6 key={index} card={card} />
+          default:
+            return "hi"
+        }
       })}
     </CardGroupWrapper>
   );
