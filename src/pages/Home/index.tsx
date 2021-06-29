@@ -8,8 +8,7 @@ import {CardGroupType} from 'types/cardGroups'
 
 const HomeWrapper = styled.div`
   background-color: #f7f6f3;
-  height: 100%;
-  padding: 24px 20px;
+  padding: 24px 10px;
 `;
 
 const Home = () => {

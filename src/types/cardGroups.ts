@@ -45,7 +45,7 @@ export type CardType = {
   bg_image?: ImageAssets;
   bg_color?: string;
   bg_gradient?: BgGradient;
-  cta?: CTA;
+  cta?: CTA[];
 };
 
 export type CardGroupType = {
