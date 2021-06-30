@@ -8,7 +8,6 @@ type HC9Props = {
 
 const HC9Wrapper = styled.div<HC9Props>`
   display: flex;
-  height: 150px;
 `
 
 const Image = styled.img`

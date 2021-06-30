@@ -18,9 +18,8 @@ const getWidth = (design_type: string): string => {
 };
 
 const getFlex = (isScrollable: boolean, designType: string): string => {
-  if (designType === 'HC9') return '0 0 40%';
-  else if (designType === 'HC5' || designType==="HC3" || designType==="HC6") return '0 0 100%';
-  else if (isScrollable) return '0 0 70%';
+  if (designType === 'HC5' || designType==="HC3" || designType==="HC6") return '0 0 100%';
+  else if (isScrollable && designType !== "HC9") return '0 0 70%';
   else return '0 1 auto';
 };
 
@@ -28,12 +27,13 @@ const CardGroupWrapper = styled.div<{ cardGroup: CardGroupType }>`
   display: flex;
   gap: 8px;
   overflow-x: ${({ cardGroup }) =>
-    cardGroup.is_scrollable ? 'auto' : 'hidden'};
+    cardGroup.design_type !== "HC9" && cardGroup.is_scrollable ? 'auto' : 'visible'};
   padding: 8px;
   > div {
     flex: ${({ cardGroup }) =>
       getFlex(cardGroup.is_scrollable, cardGroup.design_type)};
     width: ${({ cardGroup }) => getWidth(cardGroup.design_type)};
+    height: ${({ cardGroup }) => cardGroup.design_type === "HC9" && `${cardGroup.height}px`}
   }
   /* remove scrollbar */
   ::-webkit-scrollbar {
