@@ -118,7 +118,7 @@ const HC3 = ({
         setIsOptionsOpen((isOpened) => !isOpened);
       }, 500);
     });
-  }, []);
+  }, [id]);
 
   return (
     <HC3Component opened={isOptionsOpen}>
