@@ -5,6 +5,8 @@ body {
   overflow: hidden;
   font-family: 'Roboto', sans-serif;
   user-select: none;
+  scroll-behavior: smooth;
+  overscroll-behavior-y: none;
 }
 
 #root {

@@ -20,4 +20,4 @@ interface IContext extends IState {
   remindNever?: (id: string) => void;
 }
 
-export const CardGroupsContext = createContext<IContext>({ ...initialState, });
+export const CardGroupsContext = createContext<IContext>({ ...initialState });
