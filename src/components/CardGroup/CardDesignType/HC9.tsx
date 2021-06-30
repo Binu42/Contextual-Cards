@@ -1,5 +1,6 @@
 import styled from "styled-components"
 import { CardType } from 'types/cardGroups'
+import { handleRouteChange } from "utils/handleRouteChange"
 
 type HC9Props = {
   bgColor?: string
@@ -16,10 +17,10 @@ const Image = styled.img`
 `
 
 const HC9 = ({card}: {card: CardType}) => {
-  const {name, bg_image, icon, bg_color} = card;
+  const {name, bg_image, icon, bg_color, url} = card;
   const imageSrc = bg_image?.image_url || icon?.image_url;
   return (
-    <HC9Wrapper bgColor={bg_color}>
+    <HC9Wrapper bgColor={bg_color} onClick={e => handleRouteChange(url)}>
       <Image src={imageSrc} alt={name}/>
     </HC9Wrapper>
   )

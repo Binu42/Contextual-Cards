@@ -1,9 +1,10 @@
+import { useContext } from 'react';
 import styled from 'styled-components';
 import { HC1, HC6, HC3, HC5, HC9 } from './CardDesignType';
 import { CardGroupType, CardType } from 'types/cardGroups';
+import { CardGroupsContext } from 'context/cardGroups/context';
 
 const getWidth = (design_type: string): string => {
-  console.log(design_type);
   switch (design_type) {
     case 'HC3':
     case 'HC5':
@@ -12,13 +13,13 @@ const getWidth = (design_type: string): string => {
     case 'HC1':
       return '50%';
     default:
-      return 'unset';
+      return 'auto';
   }
 };
 
 const getFlex = (isScrollable: boolean, designType: string): string => {
   if (designType === 'HC9') return '0 0 40%';
-  else if (designType === 'HC5') return '0 0 100%';
+  else if (designType === 'HC5' || designType==="HC3" || designType==="HC6") return '0 0 100%';
   else if (isScrollable) return '0 0 70%';
   else return '0 1 auto';
 };
@@ -43,15 +44,17 @@ const CardGroupWrapper = styled.div<{ cardGroup: CardGroupType }>`
 `;
 
 const CardGroup = ({ cardGroup }: { cardGroup: CardGroupType }) => {
+  const { remindLater, remindNever } = useContext(CardGroupsContext);
   const { cards } = cardGroup;
   return (
     <CardGroupWrapper cardGroup={cardGroup}>
-      {cards.map((card: CardType, index: number) => {
+      {cards.map((card: CardType) => {
+        const index = Math.random();
         switch (cardGroup.design_type) {
           case 'HC1':
             return <HC1 key={index} card={card} />;
           case 'HC3':
-            return <HC3 key={index} card={card} />;
+            return <HC3 remindLater={remindLater} remindNever={remindNever} key={index} card={card} />;
           case 'HC5':
             return <HC5 key={index} card={card} />;
           case 'HC6':

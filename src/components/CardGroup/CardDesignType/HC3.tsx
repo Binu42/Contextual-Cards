@@ -1,91 +1,195 @@
-import { useEffect } from "react"
-import styled from "styled-components"
-import { CardType } from 'types/cardGroups'
+import { useMemo, useEffect, useState } from 'react';
+import { Bell, XCircle } from 'react-feather';
+import styled from 'styled-components';
+import Icon from 'components/Icon';
+import { CardType } from 'types/cardGroups';
+import { handleRouteChange } from 'utils/handleRouteChange';
+import { formatAttribute } from 'utils/formatAttribute';
 
-type HC3Props = {
-  bgColor?: string,
-  bgImage?: string
-}
+type CardProps = {
+  bgColor?: string;
+  bgImage?: string;
+  opened: boolean;
+};
 
 type ButtonProps = {
-  bgColor?: string,
-  textColor?: string
-}
+  bgColor?: string;
+  textColor?: string;
+};
 
-const HC3Wrapper = styled.div<HC3Props>`
+type OptionsProps = {
+  opened?: boolean;
+};
+
+const HC3Component = styled.div<OptionsProps>`
   position: relative;
+  margin-right: ${(props) => (props.opened ? '130px' : '0')}; ;
+`;
+
+const Options = styled.div<OptionsProps>`
+  display: ${(props) => (props.opened ? 'flex' : 'none')};
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+  flex-direction: column;
+  background: #fff;
+  border-radius: ${(props) => (props.opened ? '12px 0 0 12px' : '12px')};
+  bottom: 0;
+  left: ${(props) => (props.opened ? 0 : '-9rem')};
+  position: absolute;
+  top: 0;
+  transition: 0.5s ease-in-out;
+  width: 8rem;
+`;
+
+const CardWrapper = styled.div<CardProps>`
+  position: relative;
+  left: ${(props) => (props.opened ? '8rem' : 0)};
   padding: 8px;
-  background-image: ${({bgImage})=> `url(${bgImage})`};
+  background-image: ${({ bgImage }) => `url(${bgImage})`};
+  background-color: ${({ bgColor }) => bgColor};
+  transition: 0.5s ease-in-out;
   background-size: cover;
   height: 400px;
-  border-radius: 12px;
-`
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: ${(props) => (props.opened ? '0 12px 12px 0' : '12px')};
+`;
 
 const DetailsWrapper = styled.div`
   flex: 1 1 auto;
   position: absolute;
   padding: 30px;
   top: 40%;
-`
+`;
 
-const Title = styled.div`
+type TitleProps = {
+  align?: string;
+};
+
+const Title = styled.div<TitleProps>`
   font-weight: 500;
   font-size: 30px;
-`
+  text-align: ${({ align }) => (align ? align : 'left')};
+`;
 
-const SubHeader = styled(Title)`
+const SubHeader = styled(Title)<TitleProps>`
   padding-top: 10px;
   font-size: 16px;
   color: #fff;
-`
+  text-align: ${({ align }) => (align ? align : 'left')};
+`;
 
 const CTA = styled.div`
   display: flex;
-`
+`;
 
 const Button = styled.a<ButtonProps>`
   margin-top: 20px;
   border-radius: 5px;
   text-decoration: none;
   padding: 10px 20px;
-  background-color: ${(props)=> props.bgColor};
-  color: ${(props)=> props.textColor}
-`
+  background-color: ${(props) => props.bgColor};
+  color: ${(props) => props.textColor};
+`;
 
-const HC3 = ({card}: {card: CardType}) => {
-  console.log(card)
-  const {title, description, bg_image, icon, bg_color, cta} = card;
+const HC3 = ({
+  card,
+  remindLater,
+  remindNever,
+}: {
+  card: CardType;
+  remindLater?: (id: string) => void;
+  remindNever?: (id: string) => void;
+}) => {
+  const [isOptionsOpen, setIsOptionsOpen] = useState(false);
+  const {
+    name,
+    title,
+    description,
+    formatted_title,
+    formatted_description,
+    bg_image,
+    icon,
+    bg_color,
+    cta,
+    url,
+  } = card;
   const imageSrc = bg_image?.image_url || icon?.image_url;
+  const formattedTitle = useMemo(
+    () => formatAttribute(formatted_title),
+    [formatted_title]
+  );
+  const finalTitle = formattedTitle || title;
+  const formattedDescription = useMemo(
+    () => formatAttribute(formatted_description),
+    [formatted_description]
+  );
+  const finalDescription = formattedDescription || description;
 
-  useEffect(()=> {
-    let timeId:NodeJS.Timeout;
-    const HC3Component = document.querySelector("#HC3-component");
-    HC3Component?.addEventListener("mouseup", ()=> {
-      clearTimeout(timeId);
-    })
-    HC3Component?.addEventListener("mousedown", ()=> {
-      timeId = setTimeout(()=> {
-        console.log("timer")
-      },1000);
-    })
-  }, [])
+  const id = `HC3_${Math.ceil(Math.random() * 100)}`;
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    const HC3Component = document.querySelector(`#${id}`);
+
+    HC3Component?.addEventListener('touchstart', () => {
+      timeoutId = setTimeout(() => {
+        setIsOptionsOpen(true);
+      }, 500);
+    });
+
+    HC3Component?.addEventListener('touchend', () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    });
+  }, [id]);
 
   return (
-    <HC3Wrapper bgImage={imageSrc} bgColor={bg_color} id="HC3-component">
-      <DetailsWrapper>
-        <Title>{title}</Title>
-        <SubHeader>{description}</SubHeader>
-        <CTA>
-          {
-            cta?.map(action=> {
-              const {url, text, bg_color, text_color}=action;
-              return <Button bgColor={bg_color} textColor={text_color} target="_blank" href={url}>{text}</Button>
-            })
-          }
-        </CTA>
-      </DetailsWrapper>
-    </HC3Wrapper>
-  )
-}
+    <HC3Component opened={isOptionsOpen}>
+      <Options id='options' opened={isOptionsOpen}>
+        <Icon
+          handleClick={() => remindLater && remindLater(name)}
+          icon={<Bell color='#FBAF03' size={32} />}
+          text='remind later'
+        />
+        <Icon
+          handleClick={() => remindNever && remindNever(name)}
+          icon={<XCircle color='#FBAF03' size={32} />}
+          text='dismiss now'
+        />
+      </Options>
+      <CardWrapper
+        opened={isOptionsOpen}
+        bgImage={imageSrc}
+        onClick={(e) => handleRouteChange(url)}
+        bgColor={bg_color}
+        id={`${id}`}
+      >
+        <DetailsWrapper>
+          <Title align={formatted_title?.align}>{finalTitle}</Title>
+          <SubHeader align={formatted_title?.align}>
+            {finalDescription}
+          </SubHeader>
+          <CTA>
+            {cta?.map((action) => {
+              const { url, text, bg_color, text_color } = action;
+              return (
+                <Button
+                  key={Math.random()}
+                  bgColor={bg_color}
+                  textColor={text_color}
+                  target='_blank'
+                  href={url}
+                >
+                  {text}
+                </Button>
+              );
+            })}
+          </CTA>
+        </DetailsWrapper>
+      </CardWrapper>
+    </HC3Component>
+  );
+};
 
-export default HC3
+export default HC3;

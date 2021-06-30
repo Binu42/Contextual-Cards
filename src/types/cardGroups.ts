@@ -9,13 +9,13 @@ type Entities = {
 // for formatted title and description
 type FormattedAttribute = {
   text: string;
-  align?: "left" | "center" | "right" | "justify";
+  align?: 'left' | 'center' | 'right' | 'justify';
   entities?: Entities[];
 };
 
 // for background image or icon
 type ImageAssets = {
-  image_type: "ast" | "ext";
+  image_type: 'ast' | 'ext';
   image_url: string;
   aspect_ratio?: number;
 };
@@ -49,8 +49,8 @@ export type CardType = {
 };
 
 export type CardGroupType = {
-  id: number
-  design_type: "HC1" | "HC3" | "HC5" | "HC6" | "HC9";
+  id: number;
+  design_type: 'HC1' | 'HC3' | 'HC5' | 'HC6' | 'HC9';
   name: string;
   cards: CardType[];
   height: number;

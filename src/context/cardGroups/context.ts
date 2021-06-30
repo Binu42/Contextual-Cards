@@ -1,7 +1,8 @@
-import { createContext } from "react";
+import { createContext } from 'react';
+import { CardGroupType } from 'types/cardGroups';
 
 export interface IState {
-  cardGroups: any[];
+  cardGroups: CardGroupType[];
   pending: boolean;
   failure: boolean;
 }
@@ -15,6 +16,8 @@ export const initialState: IState = {
 interface IContext extends IState {
   setLoading?: () => void;
   fetchCardGroups?: () => Promise<void>;
+  remindLater?: (id: string) => void;
+  remindNever?: (id: string) => void;
 }
 
 export const CardGroupsContext = createContext<IContext>({ ...initialState });

@@ -1,3 +1,3 @@
-export const FETCH_CARDS = "FETCH_CARDS";
+export const SET_CARDS = "SET_CARDS";
 export const FETCH_CARDS_FAILURE = "FETCH_CARDS_FAILURE";
 export const SET_LOADING = "SET_LOADING";
