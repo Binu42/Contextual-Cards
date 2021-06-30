@@ -25,7 +25,9 @@ type OptionsProps = {
 
 const HC3Component = styled.div<OptionsProps>`
   position: relative;
-  margin-right: ${(props) => (props.opened ? '130px' : '0')}; ;
+  width: 100%;
+  border-radius: 12px;
+  overflow-x: hidden;
 `;
 
 const Options = styled.div<OptionsProps>`
