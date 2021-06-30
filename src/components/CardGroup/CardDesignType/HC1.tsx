@@ -1,11 +1,13 @@
 import Avatar from 'components/Avatar';
 import styled from 'styled-components';
-import { CardType } from 'types/cardGroups';
+import { BgGradient, CardType } from 'types/cardGroups';
 import { formatAttribute } from 'utils/formatAttribute';
+import { getGradient } from 'utils/getGradient';
 import { handleRouteChange } from 'utils/handleRouteChange';
 
 type HC1Props = {
   bgColor?: string;
+  bgGradient?: BgGradient;
 };
 
 const HC1Wrapper = styled.div<HC1Props>`
@@ -13,6 +15,9 @@ const HC1Wrapper = styled.div<HC1Props>`
   padding: 8px;
   align-items: center;
   background-color: ${({ bgColor }) => (bgColor ? bgColor : '#FBAF03')};
+  background-image: ${({ bgGradient }) =>
+    bgGradient?.colors.length &&
+    getGradient(bgGradient.angle, bgGradient.colors)};
   border-radius: 12px;
 `;
 
@@ -36,13 +41,18 @@ const Title = styled.div<TitleProps>`
 `;
 
 const HC1 = ({ card }: { card: CardType }) => {
-  const { name, title, formatted_title, bg_image, icon, bg_color, url } = card;
-  const imageSrc = bg_image?.image_url || icon?.image_url;
+  const { name, title, formatted_title, icon, bg_color, bg_gradient, url } =
+    card;
+  const imageSrc = icon?.image_url;
   const formattedTitle = formatAttribute(formatted_title);
   const finalTitle = formattedTitle || title;
 
   return (
-    <HC1Wrapper bgColor={bg_color} onClick={(e) => handleRouteChange(url)}>
+    <HC1Wrapper
+      bgColor={bg_color}
+      bgGradient={bg_gradient}
+      onClick={() => handleRouteChange(url)}
+    >
       <AvatarWrapper>
         <Avatar src={imageSrc} alt={name} />
       </AvatarWrapper>

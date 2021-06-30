@@ -1,12 +1,14 @@
 import { ChevronRight } from 'react-feather';
 import Avatar from 'components/Avatar';
 import styled from 'styled-components';
-import { CardType } from 'types/cardGroups';
+import { CardType, BgGradient } from 'types/cardGroups';
 import { handleRouteChange } from 'utils/handleRouteChange';
 import { formatAttribute } from 'utils/formatAttribute';
+import { getGradient } from 'utils/getGradient';
 
 type HC6Props = {
   bgColor?: string;
+  bgGradient?: BgGradient;
 };
 
 const HC6Wrapper = styled.div<HC6Props>`
@@ -14,6 +16,9 @@ const HC6Wrapper = styled.div<HC6Props>`
   padding: 8px 5px;
   align-items: center;
   background-color: ${({ bgColor }) => (bgColor ? bgColor : '#FBAF03')};
+  background-image: ${({ bgGradient }) =>
+    bgGradient?.colors.length &&
+    getGradient(bgGradient.angle, bgGradient.colors)};
   border-radius: 12px;
 `;
 
@@ -50,19 +55,23 @@ const HC6 = ({ card }: { card: CardType }) => {
     title,
     formatted_title,
     formatted_description,
-    bg_image,
     icon,
     bg_color,
+    bg_gradient,
     url,
   } = card;
-  const imageSrc = bg_image?.image_url || icon?.image_url;
+  const imageSrc = icon?.image_url;
   const formattedTitle = formatAttribute(formatted_title);
   const finalTitle = formattedTitle || title;
   const formattedDescription = formatAttribute(formatted_description);
   const finalDescription = formattedDescription || description;
 
   return (
-    <HC6Wrapper bgColor={bg_color} onClick={(e) => handleRouteChange(url)}>
+    <HC6Wrapper
+      bgColor={bg_color}
+      bgGradient={bg_gradient}
+      onClick={() => handleRouteChange(url)}
+    >
       <AvatarWrapper>
         <Avatar src={imageSrc} alt={name} />
       </AvatarWrapper>

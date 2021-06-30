@@ -29,7 +29,7 @@ type CTA = {
 };
 
 // for gradient
-type BgGradient = {
+export type BgGradient = {
   colors: string[];
   angle: number;
 };

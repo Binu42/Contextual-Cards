@@ -2,12 +2,14 @@ import { useMemo, useEffect, useState } from 'react';
 import { Bell, XCircle } from 'react-feather';
 import styled from 'styled-components';
 import Icon from 'components/Icon';
-import { CardType } from 'types/cardGroups';
+import { BgGradient, CardType } from 'types/cardGroups';
 import { handleRouteChange } from 'utils/handleRouteChange';
 import { formatAttribute } from 'utils/formatAttribute';
+import { getGradient } from 'utils/getGradient';
 
 type CardProps = {
   bgColor?: string;
+  bgGradient?: BgGradient;
   bgImage?: string;
   opened: boolean;
 };
@@ -48,6 +50,9 @@ const CardWrapper = styled.div<CardProps>`
   padding: 8px;
   background-image: ${({ bgImage }) => `url(${bgImage})`};
   background-color: ${({ bgColor }) => bgColor};
+  background-image: ${({ bgGradient }) =>
+    bgGradient?.colors.length &&
+    getGradient(bgGradient.angle, bgGradient.colors)};
   transition: 0.5s ease-in-out;
   background-size: cover;
   height: 400px;
@@ -110,12 +115,12 @@ const HC3 = ({
     formatted_title,
     formatted_description,
     bg_image,
-    icon,
+    bg_gradient,
     bg_color,
     cta,
     url,
   } = card;
-  const imageSrc = bg_image?.image_url || icon?.image_url;
+  const imageSrc = bg_image?.image_url;
   const formattedTitle = useMemo(
     () => formatAttribute(formatted_title),
     [formatted_title]
@@ -161,8 +166,9 @@ const HC3 = ({
       <CardWrapper
         opened={isOptionsOpen}
         bgImage={imageSrc}
-        onClick={(e) => handleRouteChange(url)}
+        onClick={() => handleRouteChange(url)}
         bgColor={bg_color}
+        bgGradient={bg_gradient}
         id={`${id}`}
       >
         <DetailsWrapper>
