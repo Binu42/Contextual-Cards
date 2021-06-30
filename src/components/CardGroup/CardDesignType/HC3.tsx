@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import {Bell, XCircle} from "react-feather"
+import { Bell, XCircle } from 'react-feather';
 import styled from 'styled-components';
-import Icon from "components/Icon"
+import Icon from 'components/Icon';
 import { CardType } from 'types/cardGroups';
 
 type CardProps = {
@@ -17,32 +17,39 @@ type ButtonProps = {
 
 type OptionsProps = {
   opened?: boolean;
-}
+};
+
+const HC3Component = styled.div<OptionsProps>`
+  position: relative;
+  margin-right: ${(props) => (props.opened ? '130px' : '0')}; ;
+`;
 
 const Options = styled.div<OptionsProps>`
-  display: flex;
+  display: ${(props) => (props.opened ? 'flex' : 'none')};
   align-items: center;
   gap: 16px;
   justify-content: center;
   flex-direction: column;
   background: #fff;
+  border-radius: 12px;
   bottom: 0;
-  left: ${(props)=> props.opened ? 0 : '-8rem'};
+  left: ${(props) => (props.opened ? 0 : '-9rem')};
   position: absolute;
   top: 0;
-  transition: .5s ease-in-out;
+  transition: 0.5s ease-in-out;
   width: 8rem;
-`
+`;
 
 const CardWrapper = styled.div<CardProps>`
   position: relative;
-  left: ${(props)=> props.opened ? "8rem" : 0};
+  left: ${(props) => (props.opened ? '8rem' : 0)};
   padding: 8px;
   background-image: ${({ bgImage }) => `url(${bgImage})`};
-  transition: .5s ease-in-out;
+  transition: 0.5s ease-in-out;
   background-size: cover;
   height: 400px;
   cursor: pointer;
+  overflow: hidden;
   border-radius: 12px;
 `;
 
@@ -77,32 +84,62 @@ const Button = styled.a<ButtonProps>`
   color: ${(props) => props.textColor};
 `;
 
-const HC3 = ({ card }: { card: CardType }) => {
-  console.log(card);
+const HC3 = ({
+  card,
+  remindLater,
+  remindNever,
+}: {
+  card: CardType;
+  remindLater?: (id: string) => void;
+  remindNever?: (id: string) => void;
+}) => {
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
-  const { title, description, bg_image, icon, bg_color, cta } = card;
+  const { name, title, description, bg_image, icon, bg_color, cta } = card;
   const imageSrc = bg_image?.image_url || icon?.image_url;
+
+  const id = `HC3_${Math.ceil(Math.random() * 100)}`;
 
   useEffect(() => {
     let timeId: NodeJS.Timeout;
-    const HC3Component = document.querySelector('#HC3-component');
-    HC3Component?.addEventListener('mouseup', () => {
+    const HC3Component = document.querySelector(`#${id}`);
+    HC3Component?.addEventListener('mouseup', (e) => {
       clearTimeout(timeId);
     });
     HC3Component?.addEventListener('mousedown', () => {
       timeId = setTimeout(() => {
-        setIsOptionsOpen(isOpened => !isOpened)
-      }, 800);
+        setIsOptionsOpen((isOpened) => !isOpened);
+      }, 500);
+    });
+    HC3Component?.addEventListener('touchstart', () => {
+      clearTimeout(timeId);
+    });
+    HC3Component?.addEventListener('touchend', () => {
+      timeId = setTimeout(() => {
+        setIsOptionsOpen((isOpened) => !isOpened);
+      }, 500);
     });
   }, []);
 
   return (
-    <div style={{position: 'relative'}}>
-      <Options id="options" opened={isOptionsOpen}>
-        <Icon icon={<Bell color="#FBAF03" size={32} />} text="remind later"/>
-        <Icon icon={<XCircle color="#FBAF03" size={32} />} text="dismiss now"/>
+    <HC3Component opened={isOptionsOpen}>
+      <Options id='options' opened={isOptionsOpen}>
+        <Icon
+          handleClick={()=> remindLater && remindLater(name)}
+          icon={<Bell color='#FBAF03' size={32} />}
+          text='remind later'
+        />
+        <Icon
+          handleClick={()=> remindNever && remindNever(name)}
+          icon={<XCircle color='#FBAF03' size={32} />}
+          text='dismiss now'
+        />
       </Options>
-      <CardWrapper opened={isOptionsOpen} bgImage={imageSrc} bgColor={bg_color} id='HC3-component'>
+      <CardWrapper
+        opened={isOptionsOpen}
+        bgImage={imageSrc}
+        bgColor={bg_color}
+        id={`${id}`}
+      >
         <DetailsWrapper>
           <Title>{title}</Title>
           <SubHeader>{description}</SubHeader>
@@ -123,7 +160,7 @@ const HC3 = ({ card }: { card: CardType }) => {
           </CTA>
         </DetailsWrapper>
       </CardWrapper>
-    </div>
+    </HC3Component>
   );
 };
 

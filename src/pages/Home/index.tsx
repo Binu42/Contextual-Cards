@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { CardGroupsContext } from "context/cardGroups/context";
 import { useContext } from "react";
+import { CardGroupsContext } from "context/cardGroups/context";
 import Spinner from "components/Spinner";
 import Alert from "components/Alert";
 import CardGroup from "components/CardGroup";

@@ -8,9 +8,9 @@ const IconWrapper = styled.div`
   border-radius: 12px;
 `
 
-const Icon = ({icon, text}) => {
+const Icon = ({icon, text, handleClick}) => {
   return (
-    <IconWrapper>
+    <IconWrapper onClick={handleClick}>
       <div>{icon}</div>
       <div>{text}</div>
     </IconWrapper>
