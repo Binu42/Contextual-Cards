@@ -4,6 +4,7 @@ body {
   background-color: #333;
   overflow: hidden;
   font-family: 'Roboto', sans-serif;
+  user-select: none;
 }
 
 #root {
